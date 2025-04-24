@@ -1,0 +1,24 @@
+<launch>
+    <param
+        name="robot_description"
+        command="$(find xacro)/xacro '$(find d435i_gazebo)/urdf/d435i_simulation.xacro'"
+    />
+
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="worlds/realsense_dynamic.world"/> <!-- Note: the world_name is with respect to GAZEBO_RESOURCE_PATH environmental variable -->
+    <arg name="paused" value="false"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="true"/>
+    <arg name="recording" value="false"/>
+    <arg name="debug" value="false"/>
+  </include>
+
+    <node
+        name="spawn_model"
+        pkg="gazebo_ros"
+        type="spawn_model"
+        args="-urdf -param robot_description -model d435i"
+    />
+    <node name="state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find d435i_gazebo)/rviz/rviz.rviz" />
+</launch>
